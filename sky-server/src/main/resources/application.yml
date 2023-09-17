@@ -12,6 +12,8 @@ spring:
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
+  jackson:
+    date-format: yyyy-MM-dd
 
 mybatis:
   #mapper配置文件
@@ -20,6 +22,7 @@ mybatis:
   configuration:
     #开启驼峰命名
     map-underscore-to-camel-case: true
+#  type-handlers-package: org.apache.ibatis.type
 
 logging:
   level:
@@ -28,7 +31,6 @@ logging:
         mapper: debug
         service: info
         controller: info
-
 sky:
   jwt:
     # 设置jwt签名加密时使用的秘钥
@@ -37,10 +39,3 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
-#  datasource:
-#    username: root
-#    password: zqh123123123
-#    host: localhost
-#    port: 3306
-#    database: sky_take_out
-#    driver-class-name: com.mysql.cj.jdbc.Driver

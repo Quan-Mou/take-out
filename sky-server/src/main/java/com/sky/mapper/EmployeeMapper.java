@@ -1,6 +1,5 @@
 package com.sky.mapper;
 
-import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Insert;
@@ -27,4 +26,9 @@ public interface EmployeeMapper {
     Integer save(Employee employee);
 
     List<Employee> pageQuery(EmployeePageQueryDTO pageQueryDTO);
+
+    Integer update(Employee employee);
+
+    @Select("select * from employee where id = #{id}")
+    Employee getById(Long id);
 }

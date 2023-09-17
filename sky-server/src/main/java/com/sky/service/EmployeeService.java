@@ -19,4 +19,11 @@ public interface EmployeeService {
     Result<?> save(EmployeeDTO employeeDTO);
 
     PageResult pageQuery(EmployeePageQueryDTO pageQueryDTO);
+
+    Result changeStatus(Integer status,Long id);
+
+
+    Result<Employee> getById(Long id);
+
+    Result editEmployee(EmployeeDTO employeeDTO);
 }

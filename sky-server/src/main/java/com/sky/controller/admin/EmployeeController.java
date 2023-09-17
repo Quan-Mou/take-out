@@ -11,7 +11,6 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
-import com.sun.org.slf4j.internal.Logger;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -71,37 +70,45 @@ public class EmployeeController {
         return success(employeeLoginVO);
     }
 
-    /**
-     * 退出
-     *
-     * @return
-     */
     @PostMapping("/logout")
     @ApiOperation("退出登陆")
     public Result<String> logout() {
         return success();
     }
 
-
-    /**
-     * 新增员工
-     * @param employeeDTO
-     * @return
-     */
     @PostMapping()
     @ApiOperation("新增员工")
     public Result save(@RequestBody EmployeeDTO employeeDTO) {
         return employeeService.save(employeeDTO);
     }
 
-    /**
-     * 员工分页查询
-     */
+
     @GetMapping("/page")
     @ApiOperation("分页/按名称查询员工")
     public Result pageQuery(EmployeePageQueryDTO pageQueryDTO) {
         PageResult pageResult = employeeService.pageQuery(pageQueryDTO);
         return success(pageResult);
+    }
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("对账号的启动和禁用")
+    public Result changeStatus(@PathVariable("status") Integer status,@RequestParam("id") Long id) {
+        System.out.println("status:" + status + " id :" + id);
+        Result result = employeeService.changeStatus(status,id);
+        return success();
+    }
+
+    @GetMapping("{id}")
+    @ApiOperation("根据id获取员工信息")
+    public Result<Employee> getById(@PathVariable("id") Long id) {
+        return employeeService.getById(id);
+    }
+
+    @PutMapping()
+    @ApiOperation("修改员工信息")
+    public Result editEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        System.out.println("employeeDTO:" + employeeDTO);
+        return employeeService.editEmployee(employeeDTO);
     }
 
 }
