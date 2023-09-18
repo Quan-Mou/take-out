@@ -2,6 +2,8 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.annotation.AutoFill;
+import com.sky.constant.AutoFillType;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
@@ -12,15 +14,10 @@ import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.service.CategoryService;
-import org.apache.catalina.util.ToStringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -45,10 +42,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Integer save(CategoryDTO categoryDTO) {
         Category category = Category.builder()
-                .createTime(LocalDateTime.now())
-                .createUser(BaseContext.getCurrentId())
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
 //              添加的分类默认是禁用的
                 .status(0)
                 .build();
@@ -76,8 +69,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void update(CategoryDTO categoryDTO) {
         Category category = Category.builder()
-                .updateUser(BaseContext.getCurrentId())
-                .updateTime(LocalDateTime.now())
                 .build();
         BeanUtils.copyProperties(categoryDTO,category);
         System.out.println("修改分类："  + category);

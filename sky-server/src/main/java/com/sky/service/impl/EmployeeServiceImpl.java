@@ -2,10 +2,11 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.annotation.AutoFill;
+import com.sky.constant.AutoFillType;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.sky.result.Result.success;
@@ -70,16 +70,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @AutoFill("INSERT")
     public Result<?> save(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO,employee);
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
         employee.setStatus(1);
 //       统一设置默认密码123456
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
         Integer save = employeeMapper.save(employee);
         return success();
     }
@@ -92,12 +89,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @AutoFill("UPDATE")
     public Result changeStatus(Integer status,Long id) {
         Employee employee = new Employee();
         employee.setStatus(status);
         employee.setId(id);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
         System.out.println(employee);
         System.out.println(employee.getUpdateTime());
         employeeMapper.update(employee);
@@ -111,11 +107,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @AutoFill(AutoFillType.UPDATE)
     public Result editEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO,employee);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        System.out.println("employee:" + employee);
         employeeMapper.update(employee);
         return success();
     }
