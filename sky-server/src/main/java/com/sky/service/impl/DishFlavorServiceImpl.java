@@ -17,7 +17,6 @@ public class DishFlavorServiceImpl implements DishFlavorService {
 
     @Override
     public void saveBatch(List<DishFlavor> dishFlavors) {
-        System.out.println("dishFlavors" + dishFlavors);
         dishFlavorMapper.saveBatch(dishFlavors);
     }
 }

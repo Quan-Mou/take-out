@@ -25,7 +25,6 @@
         <where>
             <if test="name != null and name != ''">name like concat('%',#{name},'%')</if>
             <if test="type != null">and `type` = #{type}</if>
-            <if test=""></if>
         </where>
         order by sort
     </select>

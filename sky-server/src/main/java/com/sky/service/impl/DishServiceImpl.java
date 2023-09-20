@@ -16,6 +16,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.properties.QiniuOssProperties;
 import com.sky.service.DishService;
 import com.sky.utils.QiniuOssUtil;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -60,7 +61,6 @@ public class DishServiceImpl implements DishService {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO,dish);
         dishMapper.save(dish);
-        System.out.println();
         if(dishDTO.getFlavors().size() > 0) {
             for(DishFlavor item: dishDTO.getFlavors()) {
                 item.setDishId(dish.getId());
@@ -91,7 +91,6 @@ public class DishServiceImpl implements DishService {
     public void deleteBatch(List<Long> ids) {
 //        查询当前要删除的菜品状态是否是启用状态
         List<Dish> deleteDishs = dishMapper.queryBatch(ids);
-        System.out.println("ids.size():" + ids.size());
         for(Dish item : deleteDishs) {
             if(item.getStatus() == 1) {
                 throw new BaseException("要删除的菜品名" + item.getName() + "状态为启用，请停用后再删除");
@@ -112,12 +111,10 @@ public class DishServiceImpl implements DishService {
     @Override
     @Transactional
     public void update(DishDTO dishDto) {
-        System.out.println("修改菜品：" + dishDto);
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDto,dish);
         dishMapper.update(dish);
         List<DishFlavor> flavors = dishDto.getFlavors();
-
         if(flavors.size() > 0) {
 //          先删除菜品原有口味，在新增现有的口味数据
             dishFlavorMapper.delete(dishDto.getId());
@@ -126,11 +123,6 @@ public class DishServiceImpl implements DishService {
             }
             dishFlavorMapper.saveBatch(flavors);
         }
-
-
-
-
-
     }
 
     @Override
@@ -141,5 +133,11 @@ public class DishServiceImpl implements DishService {
         List<DishFlavor> dishFlavorList = dishFlavorMapper.getDishById(id);
         dishVO.setFlavors(dishFlavorList);
         return dishVO;
+    }
+
+    @Override
+    public List<DishVO> getByCategory(Long categoryId) {
+        List<DishVO> dish = dishMapper.getByCategory(categoryId);
+        return dish;
     }
 }

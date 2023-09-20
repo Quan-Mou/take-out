@@ -36,7 +36,7 @@ public class DishController {
 
     @PostMapping("")
     @ApiOperation("新增菜品")
-    public Result save(@RequestBody DishDTO dishDTO) {
+    public Result<?> save(@RequestBody DishDTO dishDTO) {
         dishService.save(dishDTO);
         return success();
     }
@@ -44,21 +44,21 @@ public class DishController {
 
     @GetMapping("/page")
     @ApiOperation("条件分页查询菜品")
-    public Result list(DishPageQueryDTO dishPageQueryDTO) {
+    public Result<PageResult> list(DishPageQueryDTO dishPageQueryDTO) {
         Page<DishVO> page = dishService.pageQuery(dishPageQueryDTO);
         return success(new PageResult(page.getTotal(),page.getResult()));
     }
 
     @PostMapping("/status/{status}")
     @ApiOperation("禁用、开启菜品状态")
-    public Result changeStatus(@PathVariable("status") Integer status,Long id) {
+    public Result<?> changeStatus(@PathVariable("status") Integer status,Long id) {
         dishService.changeStatus(status,id);
         return success();
     }
 
     @DeleteMapping()
     @ApiOperation("根据id批量删除")
-    public Result deleteBatch(@RequestParam("ids") List<Long> ids) {
+    public Result<?> deleteBatch(@RequestParam("ids") List<Long> ids) {
         dishService.deleteBatch(ids);
         return success();
     }
@@ -66,27 +66,25 @@ public class DishController {
 
     @PutMapping("")
     @ApiOperation("修改菜品信息")
-    public Result editDish(@RequestBody DishDTO dishDto) {
-        System.out.println("修改菜品:" + dishDto);
+    public Result<?> editDish(@RequestBody DishDTO dishDto) {
         dishService.update(dishDto);
         return success();
     }
 
     @GetMapping("/{id}")
     @ApiOperation("根据id获取菜品信息")
-    public Result getById(@PathVariable Long id) {
+    public Result<DishVO> getById(@PathVariable Long id) {
         DishVO dish = dishService.getById(id);
-
-//      根据id获取菜品口味
-        List<DishFlavor> dishFlavors = dishFlavorMapper.getDishById(id);
         return success(dish);
     }
 
 
-
-
-
-
+    @GetMapping("list")
+    @ApiOperation("根据菜品分类id获取菜品信息")
+    public Result<List<DishVO>> getListById(Long categoryId) {
+        List<DishVO> dishs = dishService.getByCategory(categoryId);
+        return success(dishs);
+    }
 
 
 

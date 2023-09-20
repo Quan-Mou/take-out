@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,4 +30,6 @@ public interface DishService {
     void update(DishDTO dish);
 
     DishVO getById(Long id);
+
+    List<DishVO> getByCategory(Long categoryId);
 }
