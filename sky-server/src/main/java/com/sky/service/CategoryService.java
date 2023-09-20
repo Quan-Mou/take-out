@@ -2,8 +2,12 @@ package com.sky.service;
 
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
+import com.sky.entity.Category;
 import com.sky.result.PageResult;
+import io.swagger.models.auth.In;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
+
+import java.util.List;
 
 public interface CategoryService {
 
@@ -18,4 +22,6 @@ public interface CategoryService {
 
 
     void changeStatus(Integer stats, Long id);
+
+    List<Category> getListByType(Integer type);
 }

@@ -19,10 +19,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
-
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -81,5 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .status(stats)
                 .id(id).build();
         categoryMapper.update(category);
+    }
+
+    @Override
+    public List<Category> getListByType(Integer type) {
+        List<Category> list = categoryMapper.getListByType(type);
+        return list;
     }
 }

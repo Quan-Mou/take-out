@@ -1,23 +1,23 @@
 package com.sky.controller.admin;
 
-
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.sky.result.Result.success;
 
 @RestController
 @RequestMapping("admin/category")
+@Api(tags = "分类相关接口")
 public class CategoryController {
 
     @Autowired
@@ -56,9 +56,15 @@ public class CategoryController {
     @PostMapping("/status/{status}")
     @ApiOperation("启动、禁用状态")
     public Result changeStatus(@PathVariable("status") Integer stats,@RequestParam("id") Long id) {
-
         categoryService.changeStatus(stats,id);
         return success();
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("通过type获取分类列表")
+    public Result list(@RequestParam("type") Integer type) {
+        List<Category> list = categoryService.getListByType(type);
+        return Result.success(list);
     }
 
 

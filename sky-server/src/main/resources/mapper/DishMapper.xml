@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.DishMapper">
+
+    <insert id="save" parameterType="com.sky.entity.Dish" useGeneratedKeys="true" keyProperty="id">
+        insert into dish(name,category_id,price,image,description,status,create_time,create_user,update_time,update_user)
+        values(#{name},#{categoryId},#{price},#{image},#{description},#{status},#{createTime},#{createUser},#{updateTime},#{updateUser})
+    </insert>
+
+    <update id="update">
+        update dish
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="description !=null">description = #{description},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="status != null">status = #{status}</if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="deleteBatch">
+        delete from dish where id in(
+            <foreach collection="ids" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+    </delete>
+
+    <select id="pageQuery" resultType="com.sky.vo.DishVO">
+
+        select d.*,c.name as categoryName from dish d join category c on d.category_id = c.id
+        <where>
+            <if test="name != null and name != ''">d.name like concat('%',#{name},'%')</if>
+            <if test="categoryId != null">and d.category_id = #{categoryId} </if>
+            <if test="status != null">and d.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="queryBatch" resultType="com.sky.entity.Dish">
+        select * from dish where id in(
+            <foreach collection="ids" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+    </select>
+
+</mapper>

@@ -6,3 +6,10 @@ sky:
     port: 3306
     database: sky_take_out
     driver-class-name: com.mysql.cj.jdbc.Driver
+  qiniu:
+    access-key: vYtJiDBtYtDgDXV4VjyeIU8MKfMlD6gsVqR4ugFp
+    secret-key: jAqrs4QgRzKBf0bqfuP7MIHYzbz0dpDhByNYOXXp
+    bucket-name: qhblog
+    htt-address-name: https://img.blog-qh.com/
+
+

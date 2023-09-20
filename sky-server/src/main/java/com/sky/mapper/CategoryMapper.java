@@ -8,6 +8,7 @@ import com.sky.entity.Category;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -28,4 +29,10 @@ public interface CategoryMapper {
 
     @AutoFill(AutoFillType.UPDATE)
     void update(Category category);
+
+
+    @Select("select * from category where `type` = #{type}")
+    List<Category> getListByType(Integer type);
+
+
 }
