@@ -14,7 +14,10 @@ spring:
       password: ${sky.datasource.password}
   jackson:
     date-format: yyyy-MM-dd
-
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    database: 5
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml

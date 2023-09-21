@@ -11,5 +11,9 @@ sky:
     secret-key: jAqrs4QgRzKBf0bqfuP7MIHYzbz0dpDhByNYOXXp
     bucket-name: qhblog
     htt-address-name: https://img.blog-qh.com/
+  redis:
+    host: localhost
+    port: 6379
+
 
 
