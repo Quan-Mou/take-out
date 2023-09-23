@@ -5,6 +5,7 @@ import com.sky.annotation.AutoFill;
 import com.sky.constant.AutoFillType;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -32,4 +33,10 @@ public interface SetmealMapper {
 
     @AutoFill(AutoFillType.UPDATE)
     void update(Setmeal setmealStatus);
+
+    List<SetmealVO> list(Long categoryId);
+
+    List<DishItemVO> getSetmealDetail(Long id);
+
+
 }

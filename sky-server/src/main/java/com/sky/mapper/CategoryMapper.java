@@ -31,10 +31,8 @@ public interface CategoryMapper {
     void update(Category category);
 
 
-    @Select("select * from category where `type` = #{type}")
+//    @Select("select * from category where `type` = #{type}")
     List<Category> getListByType(Integer type);
-
-
 
 
 }

@@ -36,6 +36,16 @@
             )
     </select>
 
+    <select id="list" resultType="com.sky.vo.SetmealVO">
+        select * from setmeal
+        <where>
+            <if test="categoryId!=null">category_id = #{categoryId}</if>
+        </where>
+    </select>
+    <select id="getSetmealDetail" resultType="com.sky.vo.DishItemVO">
+        select sd.name,sd.copies,d.image,d.description  from setmeal s join setmeal_dish sd on s.id = sd.setmeal_id join dish d on sd.dish_id = d.id WHERE s.id = #{id};
+    </select>
+
     <update id="update">
         update setmeal
         <set>

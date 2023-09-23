@@ -11,4 +11,5 @@ public interface DishFlavorService {
 
     void saveBatch(List<DishFlavor> dishFlavors);
 
+//    List<DishFlavor> getDishFlavorByDishId(Long dishId);
 }

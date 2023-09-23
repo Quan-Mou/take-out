@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.sky.result.Result.success;
 
-@RestController
+@RestController("adminCategoryController")
 @RequestMapping("admin/category")
 @Api(tags = "分类相关接口")
 public class CategoryController {

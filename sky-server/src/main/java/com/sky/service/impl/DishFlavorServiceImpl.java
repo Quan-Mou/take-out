@@ -19,4 +19,10 @@ public class DishFlavorServiceImpl implements DishFlavorService {
     public void saveBatch(List<DishFlavor> dishFlavors) {
         dishFlavorMapper.saveBatch(dishFlavors);
     }
+
+//    @Override
+//    public List<DishFlavor> getDishFlavorByDishId(Long dishId) {
+////        dishFlavorMapper.get
+//        return null;
+//    }
 }

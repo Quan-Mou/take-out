@@ -38,4 +38,6 @@ public interface DishMapper {
 
     @Select("select * from dish where category_id = #{categoryId}")
     List<DishVO> getByCategory(Long categoryId);
+
+
 }

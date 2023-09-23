@@ -6,18 +6,22 @@ import com.sky.annotation.AutoFill;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.BaseException;
 import com.sky.mapper.CategoryMapper;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.SpringApplicationEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +40,7 @@ public class SetmealServiceImpl implements SetmealService {
     private SetmealDishMapper setmealDishMapper;
 
     @Autowired
-    private CategoryMapper categoryMapper;
+    private DishMapper dishMapper;
 
 
     @Override
@@ -121,5 +125,24 @@ public class SetmealServiceImpl implements SetmealService {
              setmealDishMapper.saveDishSetmeal(setmealDishes);
         }
         setmealMapper.update(setmeal);
+    }
+
+    @Override
+    public List<SetmealVO> listWithSetmealDish(Long categoryId) {
+        List<SetmealVO> list = setmealMapper.list(categoryId);
+        log.info("list before：{}",list);
+        for(SetmealVO item : list) {
+//          查询该套餐下的所以菜品
+            List<SetmealDish> setmealDishes = setmealDishMapper.getById(item.getId());
+            item.setSetmealDishes(setmealDishes);
+        }
+        log.info("list after：{}",list);
+        return list;
+    }
+
+    @Override
+    public List<DishItemVO> getSetmealOfDishList(Long id) {
+        List<DishItemVO> setmealDetail = setmealMapper.getSetmealDetail(id);
+        return setmealDetail;
     }
 }
