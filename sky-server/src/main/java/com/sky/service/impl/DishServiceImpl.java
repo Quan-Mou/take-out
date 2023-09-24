@@ -2,25 +2,22 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sky.annotation.AutoFill;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
-import com.sky.entity.Category;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.exception.BaseException;
-import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.properties.QiniuOssProperties;
 import com.sky.service.DishService;
 import com.sky.utils.QiniuOssUtil;
-import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +41,8 @@ public class DishServiceImpl implements DishService {
     private SetmealDishMapper setmealDishMapper;
 
     @Autowired
-    private CategoryMapper categoryMapper;
+    private RedisTemplate redisTemplate;
+
 
 
     @Override
@@ -56,6 +54,7 @@ public class DishServiceImpl implements DishService {
     @Override
     @Transactional
     public void save(DishDTO dishDTO) {
+        redisTemplate.delete("dish_" + dishDTO.getCategoryId());
 //        添加菜品，和菜品口味，两次sql操作，保证事务安全
 //        1.添加菜品
         Dish dish = new Dish();
@@ -111,6 +110,7 @@ public class DishServiceImpl implements DishService {
     @Override
     @Transactional
     public void update(DishDTO dishDto) {
+        redisTemplate.delete("dish_" + dishDto.getCategoryId());
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDto,dish);
         dishMapper.update(dish);
@@ -143,12 +143,18 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public List<DishVO> listWithDishFlavor(Long categoryId) {
-        List<DishVO> categoryList = dishMapper.getByCategory(categoryId);
+        List<DishVO> categoryList = new ArrayList<>();
+        String keyName = "dish_" + categoryId;
+        if (redisTemplate.hasKey(keyName)) {
+            categoryList = (List<DishVO>) redisTemplate.opsForValue().get(keyName);
+            return categoryList;
+        }
+
+        categoryList = dishMapper.getByCategory(categoryId);
         List<DishFlavor> dishFlavors = new ArrayList<>();
 
         for(DishVO item : categoryList) {
             List<DishFlavor> dishAnddishFlavor = dishFlavorMapper.getDishById(item.getId());
-
             for(DishFlavor dishFlavorItem : dishAnddishFlavor) {
                 if(item.getId() == dishFlavorItem.getDishId()) {
                     dishFlavors.add(dishFlavorItem);
@@ -156,6 +162,7 @@ public class DishServiceImpl implements DishService {
                 }
             }
         }
+        redisTemplate.opsForValue().set(keyName,categoryList);
         return categoryList;
     }
 }

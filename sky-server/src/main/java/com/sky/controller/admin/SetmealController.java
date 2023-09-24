@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,13 +35,13 @@ public class SetmealController {
     @GetMapping("/page")
     @ApiOperation("条件分页查询套餐")
     public Result paggQuery(SetmealPageQueryDTO setmealPageQueryDTO) {
-//        log.info("条件参数： {}",setmealPageQueryDTO);
         Page<SetmealVO> setmealVOS = setmealService.pageQuery(setmealPageQueryDTO);
         return success(new PageResult(setmealVOS.getTotal(),setmealVOS.getResult()));
     }
 
     @PostMapping()
     @ApiOperation("添加套餐")
+    @CacheEvict(value = "setmealCache",key = "#setmealDTO.categoryId",allEntries = true)
     public Result save(@RequestBody SetmealDTO setmealDTO) {
         log.info("参数： {}",setmealDTO);
         setmealService.save(setmealDTO);
@@ -48,6 +50,7 @@ public class SetmealController {
 
     @DeleteMapping
     @ApiOperation("可批量删除套餐")
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public Result deleteBatchById(@RequestParam List<Long> ids) {
         log.info("删除套餐");
         setmealService.deleteBatch(ids);
@@ -56,6 +59,7 @@ public class SetmealController {
 
 
     @PostMapping("/status/{status}")
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @ApiOperation("修改套餐的状态")
     public Result changeStatus(@PathVariable("status") Integer status,@RequestParam("id") Long id) {
         log.info("修改套餐的状态");
@@ -65,12 +69,14 @@ public class SetmealController {
 
     @GetMapping("/{id}")
     @ApiOperation("根据id获取套餐")
+//    @Cacheable(cacheNames = "setmealCache",key = "#id")
     public Result getSetmealById(@PathVariable("id") Long id) {
         SetmealVO setmeal = setmealService.getSetmealById(id);
         return success(setmeal);
     }
 
     @PutMapping()
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @ApiOperation("修改套餐信息")
     public Result editSetmeal(@RequestBody SetmealDTO setmealDTO) {
         log.info("修改套餐：{}",setmealDTO);

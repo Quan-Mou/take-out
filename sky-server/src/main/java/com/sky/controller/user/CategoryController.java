@@ -8,6 +8,7 @@ import com.sky.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+
 
     @GetMapping("/list")
     @ApiOperation("查询所有分类")
