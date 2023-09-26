@@ -110,6 +110,7 @@ public class DishServiceImpl implements DishService {
     @Override
     @Transactional
     public void update(DishDTO dishDto) {
+        log.info("修改菜品id：清空 分类id ：{} 缓存",dishDto.getCategoryId());
         redisTemplate.delete("dish_" + dishDto.getCategoryId());
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDto,dish);
@@ -149,12 +150,10 @@ public class DishServiceImpl implements DishService {
             categoryList = (List<DishVO>) redisTemplate.opsForValue().get(keyName);
             return categoryList;
         }
-
         categoryList = dishMapper.getByCategory(categoryId);
-        List<DishFlavor> dishFlavors = new ArrayList<>();
-
         for(DishVO item : categoryList) {
             List<DishFlavor> dishAnddishFlavor = dishFlavorMapper.getDishById(item.getId());
+            List<DishFlavor> dishFlavors = new ArrayList<>();
             for(DishFlavor dishFlavorItem : dishAnddishFlavor) {
                 if(item.getId() == dishFlavorItem.getDishId()) {
                     dishFlavors.add(dishFlavorItem);
