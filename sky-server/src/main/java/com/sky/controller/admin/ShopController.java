@@ -20,8 +20,11 @@ public class ShopController {
 
     private final String SHOP_STATUS = "shop_status";
 
-    @Autowired
-    private RedisTemplate<String, Integer> redisTemplate;
+    private final RedisTemplate<String, Integer> redisTemplate;
+
+    public ShopController(RedisTemplate<String, Integer> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
 
     @GetMapping("/status")

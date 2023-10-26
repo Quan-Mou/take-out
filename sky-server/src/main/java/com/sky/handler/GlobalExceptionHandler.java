@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
             String[] s = message.split(" ");
             return Result.error(s[2] + MessageConstant.ACCOUNT_ALREADY_EXIST);
         } else {
+            ex.printStackTrace();
             return Result.error(MessageConstant.UNKNOWN_ERROR);
         }
 

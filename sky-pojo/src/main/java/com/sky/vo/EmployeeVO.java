@@ -3,7 +3,7 @@ package com.sky.vo;
 
 import lombok.Data;
 
-//@Data
-//public class EmployeeVO {
-//
-//}
+@Data
+public class EmployeeVO {
+
+}

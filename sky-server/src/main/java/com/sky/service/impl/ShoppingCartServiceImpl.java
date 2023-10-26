@@ -100,6 +100,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void delete(ShoppingCartDTO shoppingCartDTO) {
+//       删除之前先判断当前的商品数量，如果当前商品的number大于1，就只对该数据的number-1，否则就删除这条数据
+//        根据用户id和
+        ShoppingCart shoppingCart = ShoppingCart.builder().userId(BaseContext.getCurrentId()).dishId(shoppingCartDTO.getDishId()).setmealId(shoppingCartDTO.getSetmealId()).build();
+        List<ShoppingCart> shoppingCarts = shoppingCartMapper.queryDishOrSetmeal(shoppingCart);
+        log.info("删除购物车数据：" + shoppingCarts);
+
+//        log.info("提取当个数据：" + shoppingCart1);
+
+        if(shoppingCarts.size()>0) {
+            ShoppingCart shoppingCart1 = shoppingCarts.get(0);
+            shoppingCart1.setNumber(shoppingCart1.getNumber() - 1);
+            shoppingCartMapper.update(shoppingCart1);
+            return;
+        }
         shoppingCartMapper.delete(shoppingCartDTO);
     }
 

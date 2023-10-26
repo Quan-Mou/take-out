@@ -14,6 +14,9 @@
         <set>
             <if test="number != null">number = #{number}</if>
         </set>
+        <where>
+            id = #{id}
+        </where>
     </update>
 
     <select id="queryDishOrSetmeal" resultType="com.sky.entity.ShoppingCart">
